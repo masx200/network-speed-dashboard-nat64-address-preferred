@@ -234,9 +234,9 @@ jobs:
 
           ## Test plan
 
-          - [ ] Review the generated test results
-          - [ ] Verify connectivity check data
-          - [ ] Validate report formatting
+          - [x] Review the generated test results
+          - [x] Verify connectivity check data
+          - [x] Validate report formatting
 
           🤖 Generated with [Claude Code](https://claude.com/claude-code)
           EOF
