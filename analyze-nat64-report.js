@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 import {
-  readFileSync,
+  existsSync,
   readdirSync,
+  readFileSync,
   statSync,
   writeFileSync,
-  existsSync,
 } from "fs";
-import { join, basename } from "path";
+import { basename, join } from "path";
 import { Command } from "commander";
 
 /**
@@ -249,22 +249,22 @@ class NAT64ReportAnalyzer {
     Object.values(serviceGroups).forEach((group) => {
       // DNS 平均延迟
       if (group.dns_latencies.length > 0) {
-        group.avg_dns_latency =
-          group.dns_latencies.reduce((a, b) => a + b, 0) / group.dns_latencies.length;
+        group.avg_dns_latency = group.dns_latencies.reduce((a, b) => a + b, 0) /
+          group.dns_latencies.length;
       }
 
       // 连接平均延迟
       if (group.connect_latencies.length > 0) {
-        group.avg_connect_latency =
-          group.connect_latencies.reduce((a, b) => a + b, 0) / group.connect_latencies.length;
+        group.avg_connect_latency = group.connect_latencies.reduce((a, b) =>
+          a + b, 0) / group.connect_latencies.length;
       }
 
       // 协议平均延迟
       Object.keys(group.protocols).forEach((protocol) => {
         const proto = group.protocols[protocol];
         if (proto.latencies.length > 0) {
-          proto.avg_latency =
-            proto.latencies.reduce((a, b) => a + b, 0) / proto.latencies.length;
+          proto.avg_latency = proto.latencies.reduce((a, b) => a + b, 0) /
+            proto.latencies.length;
           proto.min_latency = Math.min(...proto.latencies);
           proto.max_latency = Math.max(...proto.latencies);
         }
@@ -281,8 +281,8 @@ class NAT64ReportAnalyzer {
       // 目标主机平均延迟
       Object.values(group.targets).forEach((target) => {
         if (target.latencies.length > 0) {
-          target.avg_latency =
-            target.latencies.reduce((a, b) => a + b, 0) / target.latencies.length;
+          target.avg_latency = target.latencies.reduce((a, b) => a + b, 0) /
+            target.latencies.length;
         }
       });
     });
@@ -291,8 +291,8 @@ class NAT64ReportAnalyzer {
     Object.keys(protocolStats).forEach((protocol) => {
       const proto = protocolStats[protocol];
       if (proto.latencies.length > 0) {
-        proto.avg_latency =
-          proto.latencies.reduce((a, b) => a + b, 0) / proto.latencies.length;
+        proto.avg_latency = proto.latencies.reduce((a, b) => a + b, 0) /
+          proto.latencies.length;
         proto.min_latency = Math.min(...proto.latencies);
         proto.max_latency = Math.max(...proto.latencies);
       }
@@ -304,8 +304,8 @@ class NAT64ReportAnalyzer {
     // 全局目标主机统计
     Object.values(targetHostStats).forEach((target) => {
       if (target.latencies.length > 0) {
-        target.avg_latency =
-          target.latencies.reduce((a, b) => a + b, 0) / target.latencies.length;
+        target.avg_latency = target.latencies.reduce((a, b) => a + b, 0) /
+          target.latencies.length;
       }
       target.success_rate = target.total > 0
         ? (target.success / target.total * 100).toFixed(2)
@@ -351,7 +351,10 @@ class NAT64ReportAnalyzer {
         recommended_protocol: this.getRecommendedProtocol(group),
       })),
       target_host_statistics: targetHostStats,
-      recommendations: this.generateRecommendations(sortedServiceGroups, protocolStats),
+      recommendations: this.generateRecommendations(
+        sortedServiceGroups,
+        protocolStats,
+      ),
     };
 
     console.log("分析完成！");
@@ -370,8 +373,13 @@ class NAT64ReportAnalyzer {
     } else if (h2Rate > h3Rate && h2Rate > 50) {
       return { protocol: "h2", reason: "HTTP/2 成功率更高" };
     } else if (h3Rate === h2Rate && h3Rate > 0) {
-      return { protocol: "h3", reason: "HTTP/3 和 HTTP/2 成功率相同，优先使用 HTTP/3" };
-    } else if (group.protocols.h3.total === 0 && group.protocols.h2.total === 0) {
+      return {
+        protocol: "h3",
+        reason: "HTTP/3 和 HTTP/2 成功率相同，优先使用 HTTP/3",
+      };
+    } else if (
+      group.protocols.h3.total === 0 && group.protocols.h2.total === 0
+    ) {
       return { protocol: "none", reason: "无可用协议数据" };
     } else {
       return { protocol: "h2", reason: "HTTP/2 作为稳定备选" };
@@ -397,7 +405,8 @@ class NAT64ReportAnalyzer {
           provider: s.service_provider,
           location: s.service_location,
           prefix: s.nat64_prefix,
-          success_rate: ((s.successful_tests / s.total_tests) * 100).toFixed(2) + "%",
+          success_rate:
+            ((s.successful_tests / s.total_tests) * 100).toFixed(2) + "%",
           recommended_protocol: s.protocols.h3.total > 0 ? "h3" : "h2",
           avg_latency: Math.round(s.avg_connect_latency) + "ms",
         })),
@@ -406,7 +415,9 @@ class NAT64ReportAnalyzer {
 
     // 分析协议支持
     const h3Services = serviceGroups.filter(
-      (s) => s.protocols.h3.total > 0 && (s.protocols.h3.success / s.protocols.h3.total) > 0.5
+      (s) =>
+        s.protocols.h3.total > 0 &&
+        (s.protocols.h3.success / s.protocols.h3.total) > 0.5,
     );
 
     if (h3Services.length > 0) {
@@ -439,7 +450,8 @@ class NAT64ReportAnalyzer {
           location: s.service_location,
           prefix: s.nat64_prefix,
           avg_latency: Math.round(s.avg_connect_latency) + "ms",
-          success_rate: ((s.successful_tests / s.total_tests) * 100).toFixed(2) + "%",
+          success_rate:
+            ((s.successful_tests / s.total_tests) * 100).toFixed(2) + "%",
         })),
       });
     }
@@ -498,34 +510,63 @@ class NAT64ReportAnalyzer {
     console.log("NAT64 测试报告分析摘要");
     console.log("=".repeat(60));
 
-    const { overall_statistics, protocol_statistics, service_analysis } = this.analysisResult;
+    const { overall_statistics, protocol_statistics, service_analysis } =
+      this.analysisResult;
 
     console.log(`\n📊 总体统计:`);
     console.log(`  总测试数: ${overall_statistics.total_tests}`);
-    console.log(`  成功: ${overall_statistics.successful_tests} | 失败: ${overall_statistics.failed_tests}`);
+    console.log(
+      `  成功: ${overall_statistics.successful_tests} | 失败: ${overall_statistics.failed_tests}`,
+    );
     console.log(`  成功率: ${overall_statistics.success_rate}`);
-    console.log(`  DNS64 成功率: ${overall_statistics.dns64_success_rate?.toFixed(2)}%`);
+    console.log(
+      `  DNS64 成功率: ${overall_statistics.dns64_success_rate?.toFixed(2)}%`,
+    );
 
     console.log(`\n🚀 协议统计:`);
-    console.log(`  HTTP/3: ${protocol_statistics.h3.total} 次测试, ${protocol_statistics.h3.success_rate}% 成功率`);
+    console.log(
+      `  HTTP/3: ${protocol_statistics.h3.total} 次测试, ${protocol_statistics.h3.success_rate}% 成功率`,
+    );
     if (protocol_statistics.h3.avg_latency) {
-      console.log(`    平均延迟: ${Math.round(protocol_statistics.h3.avg_latency)}ms`);
+      console.log(
+        `    平均延迟: ${Math.round(protocol_statistics.h3.avg_latency)}ms`,
+      );
     }
-    console.log(`  HTTP/2: ${protocol_statistics.h2.total} 次测试, ${protocol_statistics.h2.success_rate}% 成功率`);
+    console.log(
+      `  HTTP/2: ${protocol_statistics.h2.total} 次测试, ${protocol_statistics.h2.success_rate}% 成功率`,
+    );
     if (protocol_statistics.h2.avg_latency) {
-      console.log(`    平均延迟: ${Math.round(protocol_statistics.h2.avg_latency)}ms`);
+      console.log(
+        `    平均延迟: ${Math.round(protocol_statistics.h2.avg_latency)}ms`,
+      );
     }
 
     console.log(`\n🏆 前 5 名 NAT64 服务:`);
     service_analysis.slice(0, 5).forEach((service, index) => {
-      console.log(`  ${index + 1}. ${service.service_provider} (${service.service_location})`);
+      console.log(
+        `  ${
+          index + 1
+        }. ${service.service_provider} (${service.service_location})`,
+      );
       console.log(`     前缀: ${service.nat64_prefix}`);
       console.log(`     成功率: ${service.success_rate}`);
-      console.log(`     HTTP/3: ${service.http3_available ? '✅' : '❌'} (${service.http3_success_rate}% 成功率)`);
-      console.log(`     HTTP/2: ${service.http2_available ? '✅' : '❌'} (${service.http2_success_rate}% 成功率)`);
-      console.log(`     推荐协议: ${service.recommended_protocol.protocol} - ${service.recommended_protocol.reason}`);
+      console.log(
+        `     HTTP/3: ${
+          service.http3_available ? "✅" : "❌"
+        } (${service.http3_success_rate}% 成功率)`,
+      );
+      console.log(
+        `     HTTP/2: ${
+          service.http2_available ? "✅" : "❌"
+        } (${service.http2_success_rate}% 成功率)`,
+      );
+      console.log(
+        `     推荐协议: ${service.recommended_protocol.protocol} - ${service.recommended_protocol.reason}`,
+      );
       if (service.avg_connect_latency > 0) {
-        console.log(`     平均延迟: ${Math.round(service.avg_connect_latency)}ms`);
+        console.log(
+          `     平均延迟: ${Math.round(service.avg_connect_latency)}ms`,
+        );
       }
     });
 
@@ -545,7 +586,11 @@ async function main() {
     .description("NAT64 测试报告分析工具")
     .version("1.0.0")
     .option("-f, --file <path>", "NAT64 测试报告文件路径")
-    .option("-o, --output <path>", "输出分析结果文件路径", "nat64-analysis-result.json")
+    .option(
+      "-o, --output <path>",
+      "输出分析结果文件路径",
+      "nat64-analysis-result.json",
+    )
     .option("--no-summary", "不显示分析摘要");
 
   program.parse(process.argv);

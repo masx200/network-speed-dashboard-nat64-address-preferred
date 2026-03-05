@@ -4,7 +4,7 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "analyze-nat64-report":"node analyze-nat64-report.js",
+    "analyze-nat64-report": "node analyze-nat64-report.js",
     "format": "deno fmt",
     "fetch": "python cf_ip_extractor.py",
     "extract": "node ip-info.js && node merge-cloudflare-ips.js",
