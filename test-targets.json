@@ -27,6 +27,13 @@
       "host": "ipv4.ping0.cc",
       "path": "/geo",
       "description": "Ping0地理位置查询 - 返回IP和地理位置信息"
+    },
+    {
+      "protocol": "https",
+      "name": "gcore.com",
+      "host": "speedtest.gcore.com",
+      "path": "/site.webmanifest",
+      "description": "Test your internet speed - Free Speedtest by Gcore"
     }
   ]
 }
