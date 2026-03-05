@@ -52,7 +52,7 @@
 
    ```bash
    git clone <your-repository-url>
-   cd network-speed-dashboard-Cloudflare-preferred-IP-address
+   cd network-speed-dashboard-nat64-address-preferred
    ```
 
 2. **安装依赖**
@@ -73,7 +73,7 @@
 ## 项目结构
 
 ```
-network-speed-dashboard-Cloudflare-preferred-IP-address/
+network-speed-dashboard-nat64-address-preferred/
 ├── public/                  # 静态资源
 │   └── failed-test-report-*.json  # 测速报告文件存放于此
 ├── src/

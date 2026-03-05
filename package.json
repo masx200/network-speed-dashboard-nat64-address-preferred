@@ -1,5 +1,5 @@
 {
-  "name": "network-speed-dashboard-cloudflare-preferred-ip-address",
+  "name": "network-speed-dashboard-nat64-address-preferred",
   "private": true,
   "type": "module",
   "version": "1.0.0",
