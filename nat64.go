@@ -9,7 +9,9 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -74,12 +76,13 @@ type TestSummary struct {
 
 var (
 	verbose      = flag.Bool("verbose", false, "详细输出")
-	concurrency  = flag.Int("concurrency", 5, "并发测试数量")
+	concurrency  = flag.Int("concurrency", 10, "并发测试数量")
 	timeout      = flag.Int("timeout", 10, "超时时间(秒)")
 	servicesFile = flag.String("services", "nat64-services.json", "NAT64服务列表文件")
 	targetsFile  = flag.String("targets", "test-targets.json", "测试目标文件")
 	outputFile   = flag.String("output", "", "输出文件名(默认自动生成)")
 	dohURL       = flag.String("doh-url", "https://pngwczx94z.cloudflare-gateway.com/dns-query", "DoH服务URL")
+	dohIP        = flag.String("dohip", "162.159.36.20", "强制解析DoH服务器域名到指定IP")
 )
 
 func main() {
@@ -92,6 +95,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "\n示例:\n")
 		fmt.Fprintf(os.Stderr, "  %s -verbose -services custom-services.json\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "  %s -concurrency 10 -timeout 15\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s -dohip 104.21.95.9 -doh-url https://deno-dns-over-https-server.g18uibxgnb.de5.net/\n", os.Args[0])
 		os.Exit(1)
 	}
 
@@ -285,21 +289,60 @@ func queryARecordViaDoH(domain string) (string, error) {
 	encodedQuery := base64.RawURLEncoding.EncodeToString(msgBytes)
 
 	// 构建 DoH 请求 URL
-	dohURL := fmt.Sprintf("%s?dns=%s", *dohURL, encodedQuery)
+	dohRequestURL := fmt.Sprintf("%s?dns=%s", *dohURL, encodedQuery)
 
 	// 创建 HTTP 请求
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", dohURL, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", dohRequestURL, nil)
 	if err != nil {
 		return "", fmt.Errorf("创建 HTTP 请求失败: %w", err)
 	}
 
 	req.Header.Set("Accept", "application/dns-json")
 
-	// 发送请求
+	// 创建 HTTP 客户端，如果指定了 dohIP，使用 DialContext 强制连接到指定 IP
 	client := &http.Client{}
+	if *dohIP != "" {
+		if *verbose {
+			fmt.Printf("  使用强制DoH服务器IP: %s\n", *dohIP)
+		}
+
+		// 解析 DoH URL 获取主机名和端口
+		parsedURL, err := url.Parse(*dohURL)
+		if err != nil {
+			return "", fmt.Errorf("解析 DoH URL 失败: %w", err)
+		}
+
+		// 获取端口，默认 443
+		port := parsedURL.Port()
+		if port == "" {
+			port = "443"
+		}
+
+		// 构建目标地址
+		targetAddr := fmt.Sprintf("[%s]:%s", *dohIP, port)
+		if !strings.Contains(*dohIP, ":") {
+			targetAddr = fmt.Sprintf("%s:%s", *dohIP, port)
+		}
+
+		// 设置自定义 Transport，使用 DialContext 强制连接到指定 IP
+		client.Transport = &http.Transport{
+			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+				dialer := &net.Dialer{
+					Timeout: time.Duration(*timeout) * time.Second,
+				}
+				// 强制使用指定的 IP 地址连接，但保持原始 Host header
+				return dialer.DialContext(ctx, network, targetAddr)
+			},
+		}
+
+		// 设置 Host header 为原始主机名
+		req.Header.Set("Host", parsedURL.Host)
+	}
+
+	// 发送请求
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("DoH 请求失败: %w", err)
