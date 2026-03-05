@@ -1,0 +1,1327 @@
+{
+  "report_info": {
+    "generated_at": "2026-03-05T06:22:37.808Z",
+    "source_file": "nat64-test-report-20260305-141906.json",
+    "original_report_time": "2026-03-05T14:19:06+08:00"
+  },
+  "overall_statistics": {
+    "total_tests": 80,
+    "successful_tests": 27,
+    "failed_tests": 53,
+    "success_rate": "33.75%",
+    "dns64_success": 80,
+    "dns64_failed": 0,
+    "dns64_success_rate": 100
+  },
+  "protocol_statistics": {
+    "h3": {
+      "total": 12,
+      "success": 12,
+      "failed": 0,
+      "latencies": [
+        502,
+        727,
+        436,
+        1094,
+        1187,
+        1026,
+        1252,
+        1369,
+        871,
+        1164,
+        1157,
+        1690
+      ],
+      "avg_latency": 1039.5833333333333,
+      "min_latency": 436,
+      "max_latency": 1690,
+      "success_rate": "100.00"
+    },
+    "h2": {
+      "total": 68,
+      "success": 15,
+      "failed": 53,
+      "latencies": [
+        922,
+        568,
+        3728,
+        491,
+        1491,
+        2623,
+        623,
+        504,
+        881,
+        2071,
+        874,
+        465,
+        900,
+        2637,
+        1044
+      ],
+      "avg_latency": 1321.4666666666667,
+      "min_latency": 465,
+      "max_latency": 3728,
+      "success_rate": "22.06"
+    },
+    "unknown": {
+      "total": 0,
+      "success": 0,
+      "failed": 0,
+      "latencies": [],
+      "success_rate": "0.00"
+    }
+  },
+  "service_analysis": [
+    {
+      "service_provider": "Kasper Dupont",
+      "service_location": "Germany / Nürnberg",
+      "nat64_prefix": "2a01:4f9:c010:3f02:64::/96",
+      "total_tests": 15,
+      "successful_tests": 15,
+      "failed_tests": 0,
+      "dns64_successful": 15,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 6,
+          "success": 6,
+          "failed": 0,
+          "latencies": [
+            502,
+            727,
+            436,
+            1094,
+            1026,
+            1252
+          ],
+          "avg_latency": 839.5,
+          "min_latency": 436,
+          "max_latency": 1252,
+          "success_rate": "100.00"
+        },
+        "h2": {
+          "total": 9,
+          "success": 9,
+          "failed": 0,
+          "latencies": [
+            922,
+            568,
+            3728,
+            491,
+            1491,
+            2623,
+            623,
+            881,
+            2071
+          ],
+          "avg_latency": 1488.6666666666667,
+          "min_latency": 491,
+          "max_latency": 3728,
+          "success_rate": "100.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "protocols": {
+            "h3": 3
+          },
+          "latencies": [
+            502,
+            1094,
+            1026
+          ],
+          "avg_latency": 874
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "protocols": {
+            "h3": 3
+          },
+          "latencies": [
+            727,
+            436,
+            1252
+          ],
+          "avg_latency": 805
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": [
+            922,
+            2623,
+            881
+          ],
+          "avg_latency": 1475.3333333333333
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": [
+            568,
+            491,
+            2071
+          ],
+          "avg_latency": 1043.3333333333333
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": [
+            3728,
+            1491,
+            623
+          ],
+          "avg_latency": 1947.3333333333333
+        }
+      },
+      "avg_dns_latency": 259.3333333333333,
+      "avg_connect_latency": 1229,
+      "dns_latencies": [
+        274,
+        284,
+        268,
+        244,
+        235,
+        236,
+        243,
+        238,
+        258,
+        239,
+        243,
+        242,
+        401,
+        267,
+        218
+      ],
+      "connect_latencies": [
+        502,
+        727,
+        922,
+        568,
+        3728,
+        436,
+        1094,
+        491,
+        1491,
+        2623,
+        1026,
+        1252,
+        623,
+        881,
+        2071
+      ],
+      "success_rate": "100.00%",
+      "http3_available": true,
+      "http3_success_rate": "100.00",
+      "http2_available": true,
+      "http2_success_rate": "100.00",
+      "recommended_protocol": {
+        "protocol": "h3",
+        "reason": "HTTP/3 和 HTTP/2 成功率相同，优先使用 HTTP/3"
+      }
+    },
+    {
+      "service_provider": "level66.services",
+      "service_location": "Germany / Anycast",
+      "nat64_prefix": "2001:67c:2960:6464::/96",
+      "total_tests": 5,
+      "successful_tests": 5,
+      "failed_tests": 0,
+      "dns64_successful": 5,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 2,
+          "success": 2,
+          "failed": 0,
+          "latencies": [
+            1187,
+            1369
+          ],
+          "avg_latency": 1278,
+          "min_latency": 1187,
+          "max_latency": 1369,
+          "success_rate": "100.00"
+        },
+        "h2": {
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "latencies": [
+            504,
+            874,
+            465
+          ],
+          "avg_latency": 614.3333333333334,
+          "min_latency": 465,
+          "max_latency": 874,
+          "success_rate": "100.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            1187
+          ],
+          "avg_latency": 1187
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            1369
+          ],
+          "avg_latency": 1369
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            504
+          ],
+          "avg_latency": 504
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            874
+          ],
+          "avg_latency": 874
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            465
+          ],
+          "avg_latency": 465
+        }
+      },
+      "avg_dns_latency": 293.4,
+      "avg_connect_latency": 879.8,
+      "dns_latencies": [
+        250,
+        242,
+        428,
+        255,
+        292
+      ],
+      "connect_latencies": [
+        1187,
+        1369,
+        504,
+        874,
+        465
+      ],
+      "success_rate": "100.00%",
+      "http3_available": true,
+      "http3_success_rate": "100.00",
+      "http2_available": true,
+      "http2_success_rate": "100.00",
+      "recommended_protocol": {
+        "protocol": "h3",
+        "reason": "HTTP/3 和 HTTP/2 成功率相同，优先使用 HTTP/3"
+      }
+    },
+    {
+      "service_provider": "ZTVI",
+      "service_location": "U.S.A. / Chicago",
+      "nat64_prefix": "2602:fc59:11:64::/96",
+      "total_tests": 5,
+      "successful_tests": 5,
+      "failed_tests": 0,
+      "dns64_successful": 5,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 2,
+          "success": 2,
+          "failed": 0,
+          "latencies": [
+            1157,
+            1690
+          ],
+          "avg_latency": 1423.5,
+          "min_latency": 1157,
+          "max_latency": 1690,
+          "success_rate": "100.00"
+        },
+        "h2": {
+          "total": 3,
+          "success": 3,
+          "failed": 0,
+          "latencies": [
+            900,
+            2637,
+            1044
+          ],
+          "avg_latency": 1527,
+          "min_latency": 900,
+          "max_latency": 2637,
+          "success_rate": "100.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            900
+          ],
+          "avg_latency": 900
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            2637
+          ],
+          "avg_latency": 2637
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            1157
+          ],
+          "avg_latency": 1157
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            1690
+          ],
+          "avg_latency": 1690
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": [
+            1044
+          ],
+          "avg_latency": 1044
+        }
+      },
+      "avg_dns_latency": 285.8,
+      "avg_connect_latency": 1485.6,
+      "dns_latencies": [
+        247,
+        430,
+        233,
+        262,
+        257
+      ],
+      "connect_latencies": [
+        900,
+        2637,
+        1157,
+        1690,
+        1044
+      ],
+      "success_rate": "100.00%",
+      "http3_available": true,
+      "http3_success_rate": "100.00",
+      "http2_available": true,
+      "http2_success_rate": "100.00",
+      "recommended_protocol": {
+        "protocol": "h3",
+        "reason": "HTTP/3 和 HTTP/2 成功率相同，优先使用 HTTP/3"
+      }
+    },
+    {
+      "service_provider": "ZTVI",
+      "service_location": "U.S.A. / Fremont",
+      "nat64_prefix": "2602:fc59:b0:64::/96",
+      "total_tests": 5,
+      "successful_tests": 2,
+      "failed_tests": 3,
+      "dns64_successful": 5,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 2,
+          "success": 2,
+          "failed": 0,
+          "latencies": [
+            871,
+            1164
+          ],
+          "avg_latency": 1017.5,
+          "min_latency": 871,
+          "max_latency": 1164,
+          "success_rate": "100.00"
+        },
+        "h2": {
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            871
+          ],
+          "avg_latency": 871
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 1,
+          "success": 1,
+          "failed": 0,
+          "protocols": {
+            "h3": 1
+          },
+          "latencies": [
+            1164
+          ],
+          "avg_latency": 1164
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        }
+      },
+      "avg_dns_latency": 242.6,
+      "avg_connect_latency": 1017.5,
+      "dns_latencies": [
+        237,
+        252,
+        216,
+        242,
+        266
+      ],
+      "connect_latencies": [
+        871,
+        1164
+      ],
+      "success_rate": "40.00%",
+      "http3_available": true,
+      "http3_success_rate": "100.00",
+      "http2_available": true,
+      "http2_success_rate": "0.00",
+      "recommended_protocol": {
+        "protocol": "h3",
+        "reason": "HTTP/3 成功率更高"
+      }
+    },
+    {
+      "service_provider": "Kasper Dupont",
+      "service_location": "Germany / Nürnberg",
+      "nat64_prefix": "2a00:1098:2c:1::/96",
+      "total_tests": 15,
+      "successful_tests": 0,
+      "failed_tests": 15,
+      "dns64_successful": 15,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "h2": {
+          "total": 15,
+          "success": 0,
+          "failed": 15,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        }
+      },
+      "avg_dns_latency": 242.13333333333333,
+      "avg_connect_latency": 0,
+      "dns_latencies": [
+        240,
+        248,
+        248,
+        256,
+        226,
+        239,
+        221,
+        245,
+        219,
+        251,
+        267,
+        233,
+        245,
+        233,
+        261
+      ],
+      "connect_latencies": [],
+      "success_rate": "0.00%",
+      "http3_available": false,
+      "http3_success_rate": "0.00",
+      "http2_available": true,
+      "http2_success_rate": "0.00",
+      "recommended_protocol": {
+        "protocol": "h2",
+        "reason": "HTTP/2 作为稳定备选"
+      }
+    },
+    {
+      "service_provider": "Kasper Dupont",
+      "service_location": "Germany / Nürnberg",
+      "nat64_prefix": "2a00:1098:2b::/96",
+      "total_tests": 15,
+      "successful_tests": 0,
+      "failed_tests": 15,
+      "dns64_successful": 15,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "h2": {
+          "total": 15,
+          "success": 0,
+          "failed": 15,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        }
+      },
+      "avg_dns_latency": 248.73333333333332,
+      "avg_connect_latency": 0,
+      "dns_latencies": [
+        255,
+        255,
+        255,
+        257,
+        259,
+        267,
+        261,
+        221,
+        255,
+        243,
+        255,
+        237,
+        230,
+        217,
+        264
+      ],
+      "connect_latencies": [],
+      "success_rate": "0.00%",
+      "http3_available": false,
+      "http3_success_rate": "0.00",
+      "http2_available": true,
+      "http2_success_rate": "0.00",
+      "recommended_protocol": {
+        "protocol": "h2",
+        "reason": "HTTP/2 作为稳定备选"
+      }
+    },
+    {
+      "service_provider": "Kasper Dupont",
+      "service_location": "Germany / Nürnberg",
+      "nat64_prefix": "2a01:4f8:c2c:123f:64::/96",
+      "total_tests": 15,
+      "successful_tests": 0,
+      "failed_tests": 15,
+      "dns64_successful": 15,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "h2": {
+          "total": 15,
+          "success": 0,
+          "failed": 15,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        },
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 3,
+          "success": 0,
+          "failed": 3,
+          "protocols": {
+            "h2": 3
+          },
+          "latencies": []
+        }
+      },
+      "avg_dns_latency": 266.3333333333333,
+      "avg_connect_latency": 0,
+      "dns_latencies": [
+        222,
+        242,
+        278,
+        278,
+        442,
+        439,
+        257,
+        218,
+        240,
+        214,
+        233,
+        233,
+        262,
+        221,
+        216
+      ],
+      "connect_latencies": [],
+      "success_rate": "0.00%",
+      "http3_available": false,
+      "http3_success_rate": "0.00",
+      "http2_available": true,
+      "http2_success_rate": "0.00",
+      "recommended_protocol": {
+        "protocol": "h2",
+        "reason": "HTTP/2 作为稳定备选"
+      }
+    },
+    {
+      "service_provider": "Trex",
+      "service_location": "Finland / Tampere",
+      "nat64_prefix": "2001:67c:2b0:db32:0:1::/96",
+      "total_tests": 5,
+      "successful_tests": 0,
+      "failed_tests": 5,
+      "dns64_successful": 5,
+      "dns64_failed": 0,
+      "protocols": {
+        "h3": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "h2": {
+          "total": 5,
+          "success": 0,
+          "failed": 5,
+          "latencies": [],
+          "success_rate": "0.00"
+        },
+        "unknown": {
+          "total": 0,
+          "success": 0,
+          "failed": 0,
+          "latencies": [],
+          "success_rate": "0.00"
+        }
+      },
+      "targets": {
+        "ipv4.ipleak.net/?mode=json": {
+          "host": "ipv4.ipleak.net",
+          "path": "/?mode=json",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "www.encryptedsni.com/cdn-cgi/trace": {
+          "host": "www.encryptedsni.com",
+          "path": "/cdn-cgi/trace",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "api-ipv4.ip.sb/geoip": {
+          "host": "api-ipv4.ip.sb",
+          "path": "/geoip",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "ipv4.ping0.cc/geo": {
+          "host": "ipv4.ping0.cc",
+          "path": "/geo",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        },
+        "speedtest.gcore.com/site.webmanifest": {
+          "host": "speedtest.gcore.com",
+          "path": "/site.webmanifest",
+          "total": 1,
+          "success": 0,
+          "failed": 1,
+          "protocols": {
+            "h2": 1
+          },
+          "latencies": []
+        }
+      },
+      "avg_dns_latency": 245.4,
+      "avg_connect_latency": 0,
+      "dns_latencies": [
+        220,
+        272,
+        247,
+        246,
+        242
+      ],
+      "connect_latencies": [],
+      "success_rate": "0.00%",
+      "http3_available": false,
+      "http3_success_rate": "0.00",
+      "http2_available": true,
+      "http2_success_rate": "0.00",
+      "recommended_protocol": {
+        "protocol": "h2",
+        "reason": "HTTP/2 作为稳定备选"
+      }
+    }
+  ],
+  "target_host_statistics": {
+    "ipv4.ipleak.net/?mode=json": {
+      "host": "ipv4.ipleak.net",
+      "path": "/?mode=json",
+      "total": 16,
+      "success": 5,
+      "failed": 11,
+      "avg_latency": 1796.6,
+      "latencies": [
+        3728,
+        1491,
+        623,
+        504,
+        2637
+      ],
+      "success_rate": "31.25"
+    },
+    "ipv4.ping0.cc/geo": {
+      "host": "ipv4.ping0.cc",
+      "path": "/geo",
+      "total": 16,
+      "success": 5,
+      "failed": 11,
+      "avg_latency": 1268.8,
+      "latencies": [
+        922,
+        2623,
+        881,
+        874,
+        1044
+      ],
+      "success_rate": "31.25"
+    },
+    "api-ipv4.ip.sb/geoip": {
+      "host": "api-ipv4.ip.sb",
+      "path": "/geoip",
+      "total": 16,
+      "success": 6,
+      "failed": 10,
+      "avg_latency": 1021.6666666666666,
+      "latencies": [
+        502,
+        1094,
+        1187,
+        1026,
+        1164,
+        1157
+      ],
+      "success_rate": "37.50"
+    },
+    "www.encryptedsni.com/cdn-cgi/trace": {
+      "host": "www.encryptedsni.com",
+      "path": "/cdn-cgi/trace",
+      "total": 16,
+      "success": 6,
+      "failed": 10,
+      "avg_latency": 1057.5,
+      "latencies": [
+        727,
+        436,
+        1252,
+        1369,
+        871,
+        1690
+      ],
+      "success_rate": "37.50"
+    },
+    "speedtest.gcore.com/site.webmanifest": {
+      "host": "speedtest.gcore.com",
+      "path": "/site.webmanifest",
+      "total": 16,
+      "success": 5,
+      "failed": 11,
+      "avg_latency": 899,
+      "latencies": [
+        568,
+        491,
+        2071,
+        465,
+        900
+      ],
+      "success_rate": "31.25"
+    }
+  },
+  "recommendations": [
+    {
+      "type": "best_services",
+      "title": "推荐的 NAT64 服务",
+      "items": [
+        {
+          "provider": "Kasper Dupont",
+          "location": "Germany / Nürnberg",
+          "prefix": "2a01:4f9:c010:3f02:64::/96",
+          "success_rate": "100.00%",
+          "recommended_protocol": "h3",
+          "avg_latency": "1229ms"
+        },
+        {
+          "provider": "level66.services",
+          "location": "Germany / Anycast",
+          "prefix": "2001:67c:2960:6464::/96",
+          "success_rate": "100.00%",
+          "recommended_protocol": "h3",
+          "avg_latency": "880ms"
+        },
+        {
+          "provider": "ZTVI",
+          "location": "U.S.A. / Chicago",
+          "prefix": "2602:fc59:11:64::/96",
+          "success_rate": "100.00%",
+          "recommended_protocol": "h3",
+          "avg_latency": "1486ms"
+        }
+      ]
+    },
+    {
+      "type": "http3_support",
+      "title": "支持 HTTP/3 的服务",
+      "count": 4,
+      "items": [
+        {
+          "provider": "Kasper Dupont",
+          "location": "Germany / Nürnberg",
+          "prefix": "2a01:4f9:c010:3f02:64::/96",
+          "h3_success_rate": "100.00%",
+          "avg_h3_latency": "840ms"
+        },
+        {
+          "provider": "level66.services",
+          "location": "Germany / Anycast",
+          "prefix": "2001:67c:2960:6464::/96",
+          "h3_success_rate": "100.00%",
+          "avg_h3_latency": "1278ms"
+        },
+        {
+          "provider": "ZTVI",
+          "location": "U.S.A. / Chicago",
+          "prefix": "2602:fc59:11:64::/96",
+          "h3_success_rate": "100.00%",
+          "avg_h3_latency": "1424ms"
+        },
+        {
+          "provider": "ZTVI",
+          "location": "U.S.A. / Fremont",
+          "prefix": "2602:fc59:b0:64::/96",
+          "h3_success_rate": "100.00%",
+          "avg_h3_latency": "1018ms"
+        }
+      ]
+    },
+    {
+      "type": "low_latency",
+      "title": "低延迟服务推荐",
+      "items": [
+        {
+          "provider": "level66.services",
+          "location": "Germany / Anycast",
+          "prefix": "2001:67c:2960:6464::/96",
+          "avg_latency": "880ms",
+          "success_rate": "100.00%"
+        },
+        {
+          "provider": "ZTVI",
+          "location": "U.S.A. / Fremont",
+          "prefix": "2602:fc59:b0:64::/96",
+          "avg_latency": "1018ms",
+          "success_rate": "40.00%"
+        },
+        {
+          "provider": "Kasper Dupont",
+          "location": "Germany / Nürnberg",
+          "prefix": "2a01:4f9:c010:3f02:64::/96",
+          "avg_latency": "1229ms",
+          "success_rate": "100.00%"
+        }
+      ]
+    },
+    {
+      "type": "protocol_summary",
+      "title": "协议使用统计",
+      "h3": {
+        "total": 12,
+        "success_rate": "100.00%",
+        "avg_latency": "1040ms"
+      },
+      "h2": {
+        "total": 68,
+        "success_rate": "22.06%",
+        "avg_latency": "1321ms"
+      }
+    }
+  ]
+}

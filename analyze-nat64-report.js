@@ -205,11 +205,15 @@ class NAT64ReportAnalyzer {
           success: 0,
           failed: 0,
           protocols: {},
+          latencies: [],
         };
       }
       group.targets[targetKey].total++;
       if (result.connect_success) {
         group.targets[targetKey].success++;
+        if (result.connect_latency_ms) {
+          group.targets[targetKey].latencies.push(result.connect_latency_ms);
+        }
       } else {
         group.targets[targetKey].failed++;
       }
