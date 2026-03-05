@@ -1,0 +1,25 @@
+{
+  "report_info": {
+    "generated_at": "2025-12-01T08:41:58.614Z",
+    "source_file": "connectivity_results.json",
+    "total_tests": 412,
+    "failed_tests": 6,
+    "success_tests": 406,
+    "failure_rate": 1.46
+  },
+  "statistics": {
+    "by_ip_version": {
+      "ipv4": 6,
+      "ipv6": 0
+    },
+    "by_protocol": {
+      "h3": 1,
+      "none": 5
+    },
+    "by_error_type": {
+      "未知错误": 1,
+      "连接超时": 5
+    }
+  },
+  "failed_tests": []
+}
