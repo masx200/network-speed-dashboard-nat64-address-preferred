@@ -1,0 +1,44 @@
+{
+  "name": "network-speed-dashboard-cloudflare-preferred-ip-address",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "format": "deno fmt",
+    "fetch": "python cf_ip_extractor.py",
+    "extract": "node ip-info.js && node merge-cloudflare-ips.js",
+    "check": "node ip-info.js && go run -v  host_connectivity_check.go -verbose  -dohip 104.21.95.9 --doh-url https://deno-dns-over-https-server.g18uibxgnb.de5.net/",
+    "start": "node ip-info.js && node generate-test-report.js",
+    "clean": "node clean-reports.js",
+    "merge-results": "node merge-connectivity-results.js",
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force"
+  },
+  "dependencies": {
+    "@fontsource/roboto": "5.2.9",
+    "@mdi/font": "7.4.47",
+    "@mdi/js": "^7.4.47",
+    "commander": "^14.0.2",
+    "vue": "^3.5.29",
+    "vuetify": "^3.11.5",
+    "workbox-window": "^7.4.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "^25.3.2",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "npm-run-all2": "^8.0.4",
+    "sass-embedded": "^1.97.3",
+    "typescript": "~5.9.2",
+    "unplugin-fonts": "^1.4.0",
+    "unplugin-vue-components": "^30.0.0",
+    "vite": "^7.3.0",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-vuetify": "^2.1.2",
+    "vue-tsc": "^3.2.1"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "services": [
+    {
+      "provider": "Kasper Dupont",
+      "location": "Germany / Nürnberg",
+      "website": "https://nat64.net/public-providers",
+      "nat64_prefixes": [
+        "2a00:1098:2b::/96",
+        "2a00:1098:2c:1::/96",
+        "2a01:4f8:c2c:123f:64::/96",
+        "2a01:4f9:c010:3f02:64::/96"
+      ],
+      "dot": "dot.nat64.dk"
+    },
+    {
+      "provider": "Kasper Dupont",
+      "location": "United Kingdom / London",
+      "website": "https://nat64.net/public-providers",
+      "nat64_prefixes": [
+        "2a00:1098:2b::/96",
+        "2a00:1098:2c:1::/96",
+        "2a01:4f8:c2c:123f:64::/96",
+        "2a01:4f9:c010:3f02:64::/96"
+      ],
+      "dot": "dot.nat64.dk"
+    },
+    {
+      "provider": "Kasper Dupont",
+      "location": "Finland / Helsinki",
+      "website": "https://nat64.net/public-providers",
+      "nat64_prefixes": [
+        "2a00:1098:2b::/96",
+        "2a00:1098:2c:1::/96",
+        "2a01:4f8:c2c:123f:64::/96",
+        "2a01:4f9:c010:3f02:64::/96"
+      ],
+      "dot": "dot.nat64.dk"
+    },
+    {
+      "provider": "level66.services",
+      "location": "Germany / Anycast",
+      "website": "https://level66.services/services/nat64/",
+      "nat64_prefixes": [
+        "2001:67c:2960:6464::/96"
+      ]
+    },
+    {
+      "provider": "Trex",
+      "location": "Finland / Tampere",
+      "nat64_prefixes": [
+        "2001:67c:2b0:db32:0:1::/96"
+      ]
+    },
+    {
+      "provider": "ZTVI",
+      "location": "U.S.A. / Fremont",
+      "website": "https://www.ztvi.org/",
+      "nat64_prefixes": [
+        "2602:fc59:b0:64::/96"
+      ]
+    },
+    {
+      "provider": "ZTVI",
+      "location": "U.S.A. / Chicago",
+      "website": "https://www.ztvi.org/",
+      "nat64_prefixes": [
+        "2602:fc59:11:64::/96"
+      ]
+    }
+  ]
+}

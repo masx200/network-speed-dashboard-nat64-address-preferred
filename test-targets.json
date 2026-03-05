@@ -1,0 +1,41 @@
+{
+  "targets": [
+    {
+      "name": "Google DNS",
+      "host": "dns.google",
+      "expected_ip": "8.8.8.8",
+      "description": "Google Public DNS"
+    },
+    {
+      "name": "Cloudflare DNS",
+      "host": "one.one.one.one",
+      "expected_ip": "1.1.1.1",
+      "description": "Cloudflare DNS"
+    },
+    {
+      "name": "Google",
+      "host": "www.google.com",
+      "description": "Google Search"
+    },
+    {
+      "name": "Cloudflare",
+      "host": "www.cloudflare.com",
+      "description": "Cloudflare Website"
+    },
+    {
+      "name": "Example",
+      "host": "example.com",
+      "description": "Example Domain"
+    },
+    {
+      "name": "GitHub",
+      "host": "github.com",
+      "description": "GitHub"
+    },
+    {
+      "name": "Wikipedia",
+      "host": "www.wikipedia.org",
+      "description": "Wikipedia"
+    }
+  ]
+}
