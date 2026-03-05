@@ -203,8 +203,12 @@ func runTests(services []NAT64Service, targets []TestTarget) []NAT64TestResult {
 						if result.ConnectSuccess {
 							status = "✅"
 						}
-						fmt.Printf("%s [%s] %s%s -> %s\n",
-							status, s.Location, t.Host, t.Path, pref)
+						protocol := result.Protocol
+						if protocol == "" {
+							protocol = "unknown"
+						}
+						fmt.Printf("%s [%s] %s%s -> %s (%s)\n",
+							status, s.Location, t.Host, t.Path, pref, protocol)
 					}
 				}(service, prefix, target)
 			}
@@ -257,13 +261,14 @@ func testNAT64Service(service NAT64Service, nat64Prefix string, target TestTarge
 	result.SynthesizedIPv6 = synthesizedIPv6
 	result.TestDetails["synthesized_ipv6"] = synthesizedIPv6
 
-	// 步骤 3: 测试通过 NAT64 连接
+	// 步骤 3: 测试通过 NAT64 连接（先尝试 HTTP/3，失败则回退到 HTTP/2）
 	start = time.Now()
-	success, statusCode, latency, err := testNAT64Connection(synthesizedIPv6, target.Host, target.Path)
+	success, statusCode, latency, protocol, serverHeader, err := testNAT64Connection(synthesizedIPv6, target.Host, target.Path)
 	result.ConnectLatencyMs = latency
 
 	if err != nil {
 		result.ConnectSuccess = false
+		result.Protocol = protocol
 		result.ErrorMessage = fmt.Sprintf("连接失败: %v", err)
 		result.TestDetails["connect_error"] = err.Error()
 		return result
@@ -271,6 +276,8 @@ func testNAT64Service(service NAT64Service, nat64Prefix string, target TestTarge
 
 	result.ConnectSuccess = success
 	result.HTTPStatusCode = &statusCode
+	result.Protocol = protocol
+	result.ServerHeader = serverHeader
 
 	return result
 }
