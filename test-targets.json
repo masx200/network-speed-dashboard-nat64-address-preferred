@@ -1,24 +1,25 @@
 {
   "targets": [
     {
+      "protocol": "https",
       "name": "IPLeak.net",
       "host": "ipv4.ipleak.net",
       "path": "/?mode=json",
       "description": "IPv4地理位置查询 - 返回JSON格式的IP和地理位置信息"
     },
-    {
+    { "protocol": "https",
       "name": "EncryptedSNI",
       "host": "www.encryptedsni.com",
       "path": "/cdn-cgi/trace",
       "description": "Cloudflare CDN Trace - 返回网络连接和位置信息"
     },
-    {
+    { "protocol": "https",
       "name": "IP.sb GeoIP",
       "host": "api-ipv4.ip.sb",
       "path": "/geoip",
       "description": "IP.sb地理位置API - 返回详细的IP地理位置信息"
     },
-    {
+    { "protocol": "https",
       "name": "Ping0.cc",
       "host": "ipv4.ping0.cc",
       "path": "/geo",
