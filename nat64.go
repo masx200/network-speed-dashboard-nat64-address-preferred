@@ -30,6 +30,7 @@ type TestTarget struct {
 	Name        string `json:"name"`
 	Host        string `json:"host"`
 	ExpectedIP  string `json:"expected_ip,omitempty"`
+	Path        string `json:"path,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -41,6 +42,7 @@ type NAT64TestResult struct {
 	DNSServer        string            `json:"dns_server"`
 	NAT64Prefix      string            `json:"nat64_prefix"`
 	TargetHost       string            `json:"target_host"`
+	TargetPath       string            `json:"target_path,omitempty"`
 	OriginalIPv4     string            `json:"original_ipv4,omitempty"`
 	SynthesizedIPv6  string            `json:"synthesized_ipv6,omitempty"`
 	DNS64Success     bool              `json:"dns64_success"`
@@ -54,26 +56,26 @@ type NAT64TestResult struct {
 
 // NAT64TestReport 测试报告
 type NAT64TestReport struct {
-	ReportInfo    map[string]interface{} `json:"report_info"`
-	TestResults   []NAT64TestResult      `json:"test_results"`
-	Summary       TestSummary            `json:"summary"`
+	ReportInfo  map[string]interface{} `json:"report_info"`
+	TestResults []NAT64TestResult      `json:"test_results"`
+	Summary     TestSummary            `json:"summary"`
 }
 
 // TestSummary 测试摘要
 type TestSummary struct {
-	TotalTests        int     `json:"total_tests"`
-	SuccessTests      int     `json:"success_tests"`
-	FailedTests       int     `json:"failed_tests"`
-	DNS64SuccessRate  float64 `json:"dns64_success_rate"`
+	TotalTests         int     `json:"total_tests"`
+	SuccessTests       int     `json:"success_tests"`
+	FailedTests        int     `json:"failed_tests"`
+	DNS64SuccessRate   float64 `json:"dns64_success_rate"`
 	ConnectSuccessRate float64 `json:"connect_success_rate"`
-	AvgDNSLatency     float64 `json:"avg_dns_latency_ms"`
-	AvgConnectLatency float64 `json:"avg_connect_latency_ms"`
+	AvgDNSLatency      float64 `json:"avg_dns_latency_ms"`
+	AvgConnectLatency  float64 `json:"avg_connect_latency_ms"`
 }
 
 var (
-	verbose     = flag.Bool("verbose", false, "详细输出")
-	concurrency = flag.Int("concurrency", 5, "并发测试数量")
-	timeout     = flag.Int("timeout", 10, "超时时间(秒)")
+	verbose      = flag.Bool("verbose", false, "详细输出")
+	concurrency  = flag.Int("concurrency", 5, "并发测试数量")
+	timeout      = flag.Int("timeout", 10, "超时时间(秒)")
 	servicesFile = flag.String("services", "nat64-services.json", "NAT64服务列表文件")
 	targetsFile  = flag.String("targets", "test-targets.json", "测试目标文件")
 	outputFile   = flag.String("output", "", "输出文件名(默认自动生成)")
@@ -194,8 +196,8 @@ func runTests(services []NAT64Service, targets []TestTarget) []NAT64TestResult {
 						if result.ConnectSuccess {
 							status = "✅"
 						}
-						fmt.Printf("%s [%s] %s -> %s\n",
-							status, s.Location, t.Host, pref)
+						fmt.Printf("%s [%s] %s%s -> %s\n",
+							status, s.Location, t.Host, t.Path, pref)
 					}
 				}(service, prefix, target)
 			}
@@ -216,6 +218,7 @@ func testNAT64Service(service NAT64Service, nat64Prefix string, target TestTarge
 		DNSServer:       *dohURL,
 		NAT64Prefix:     nat64Prefix,
 		TargetHost:      target.Host,
+		TargetPath:      target.Path,
 		TestDetails:     make(map[string]string),
 	}
 
@@ -249,7 +252,7 @@ func testNAT64Service(service NAT64Service, nat64Prefix string, target TestTarge
 
 	// 步骤 3: 测试通过 NAT64 连接
 	start = time.Now()
-	success, statusCode, latency, err := testNAT64Connection(synthesizedIPv6, target.Host)
+	success, statusCode, latency, err := testNAT64Connection(synthesizedIPv6, target.Host, target.Path)
 	result.ConnectLatencyMs = latency
 
 	if err != nil {
@@ -378,9 +381,8 @@ func isNAT64Address(ipv6Addr, prefix string) bool {
 	return ipNet.Contains(ip)
 }
 
-
 // testNAT64Connection 测试通过 NAT64 的连接
-func testNAT64Connection(ipv6Addr, hostname string) (bool, uint16, uint64, error) {
+func testNAT64Connection(ipv6Addr, hostname, path string) (bool, uint16, uint64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
 	defer cancel()
 
@@ -396,14 +398,19 @@ func testNAT64Connection(ipv6Addr, hostname string) (bool, uint16, uint64, error
 		},
 	}
 
-	url := fmt.Sprintf("https://%s/", hostname)
+	// 构建完整 URL，包含路径
+	url := fmt.Sprintf("https://%s%s", hostname, path)
+	if path == "" {
+		url = fmt.Sprintf("https://%s/", hostname)
+	}
+
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return false, 0, 0, err
 	}
 
 	req.Header.Set("Host", hostname)
-	req.Header.Set("User-Agent", "NAT64-Tester/1.0")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36")
 
 	start := time.Now()
 	resp, err := client.Do(req)

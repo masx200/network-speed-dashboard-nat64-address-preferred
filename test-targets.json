@@ -1,41 +1,28 @@
 {
   "targets": [
     {
-      "name": "Google DNS",
-      "host": "dns.google",
-      "expected_ip": "8.8.8.8",
-      "description": "Google Public DNS"
+      "name": "IPLeak.net",
+      "host": "ipv4.ipleak.net",
+      "path": "/?mode=json",
+      "description": "IPv4地理位置查询 - 返回JSON格式的IP和地理位置信息"
     },
     {
-      "name": "Cloudflare DNS",
-      "host": "one.one.one.one",
-      "expected_ip": "1.1.1.1",
-      "description": "Cloudflare DNS"
+      "name": "EncryptedSNI",
+      "host": "www.encryptedsni.com",
+      "path": "/cdn-cgi/trace",
+      "description": "Cloudflare CDN Trace - 返回网络连接和位置信息"
     },
     {
-      "name": "Google",
-      "host": "www.google.com",
-      "description": "Google Search"
+      "name": "IP.sb GeoIP",
+      "host": "api-ipv4.ip.sb",
+      "path": "/geoip",
+      "description": "IP.sb地理位置API - 返回详细的IP地理位置信息"
     },
     {
-      "name": "Cloudflare",
-      "host": "www.cloudflare.com",
-      "description": "Cloudflare Website"
-    },
-    {
-      "name": "Example",
-      "host": "example.com",
-      "description": "Example Domain"
-    },
-    {
-      "name": "GitHub",
-      "host": "github.com",
-      "description": "GitHub"
-    },
-    {
-      "name": "Wikipedia",
-      "host": "www.wikipedia.org",
-      "description": "Wikipedia"
+      "name": "Ping0.cc",
+      "host": "ipv4.ping0.cc",
+      "path": "/geo",
+      "description": "Ping0地理位置查询 - 返回IP和地理位置信息"
     }
   ]
 }
