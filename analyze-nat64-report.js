@@ -581,6 +581,18 @@ async function main() {
   // 查找最新的报告文件
   const defaultFile = findLatestNAT64ReportFile();
 
+  // 生成默认输出文件名（带时间戳）
+  function generateOutputFilename() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    return `nat64-analysis-result-${year}${month}${day}-${hours}${minutes}${seconds}.json`;
+  }
+
   program
     .name("analyze-nat64-report")
     .description("NAT64 测试报告分析工具")
@@ -589,7 +601,7 @@ async function main() {
     .option(
       "-o, --output <path>",
       "输出分析结果文件路径",
-      "nat64-analysis-result.json",
+      generateOutputFilename(),
     )
     .option("--no-summary", "不显示分析摘要");
 
