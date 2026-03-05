@@ -300,7 +300,7 @@ func queryARecordViaDoH(domain string) (string, error) {
 		return "", fmt.Errorf("创建 HTTP 请求失败: %w", err)
 	}
 
-	req.Header.Set("Accept", "application/dns-json")
+	req.Header.Set("Accept", "application/dns-message")
 
 	// 创建 HTTP 客户端，如果指定了 dohIP，使用 DialContext 强制连接到指定 IP
 	client := &http.Client{}
