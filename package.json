@@ -22,7 +22,7 @@
     "@fontsource/roboto": "5.2.9",
     "@mdi/font": "7.4.47",
     "@mdi/js": "^7.4.47",
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "vue": "^3.5.29",
     "vuetify": "^3.11.5",
     "workbox-window": "^7.4.0"
