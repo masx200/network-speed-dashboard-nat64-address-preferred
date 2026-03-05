@@ -8,6 +8,6 @@ pyppeteer==2.0.0
 soupsieve==2.8.1
 tqdm==4.67.1
 typing-extensions==4.15.0
-urllib3==1.26.20
+urllib3==2.6.3
 websockets==10.4
 zipp==3.23.0
