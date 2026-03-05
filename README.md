@@ -1,296 +1,301 @@
-# 网络测速结果仪表板-cloudflare优选ip地址
-
-好的，这是一个为你生成的 `README.md`
-文件，详细介绍了项目的功能、技术栈以及如何运行和使用。
-
----
+# NAT64 网络测速仪表板
 
 ![Vue](https://img.shields.io/badge/Vue-3-green.svg)
-![Vite](https://img.shields.io/badge/Vite-4.0+-blue.svg)
+![Vite](https://img.shields.io/badge/Vite-7.0+-blue.svg)
 ![Vuetify](https://img.shields.io/badge/Vuetify-3.0+-blueviolet.svg)
+![Go](https://img.shields.io/badge/Go-1.25+-00ADD8.svg)
 
-这是一个基于 Vue 3 和 Vuetify
-的前端项目，用于可视化和分析网络连接测速结果。它可以动态加载多个 JSON
-报告文件，并提供强大的排序和筛选功能，帮助用户快速分析网络性能。
+这是一个用于测试和可视化 **NAT64/DNS64 服务** 以及 **Cloudflare 优选 IP**
+的网络测速仪表板项目。包含 Vue.js 前端仪表板和 Go 语言后端测试工具。
 
 ## 功能特性
 
-- **动态数据加载**: 使用 Vite 的 `import.meta.glob` 功能，自动读取并加载
-  `public` 目录下所有符合 `failed-test-report-*.json` 命名格式的报告文件。
-- **综合数据展示**: 在一个统一的表格中展示所有成功和失败的测试记录。
-- **多维度排序**:
-  支持按任意列进行排序，默认按网络延迟（`latency_ms`）升序排列，方便快速找到最优节点。
-- **高级筛选**: 提供丰富的筛选选项，可以根据以下条件过滤结果：
-  - 测试环境国家
-  - 自治系统号 (ASN)
-  - IP 版本
-  - 网络协议
-  - 测试成功/失败状态
-- **统计概览**: 在页面顶部直观展示总测试数、成功数、失败数和平均延迟等关键指标。
-- **响应式设计**: 基于 Vuetify 的 Material Design
-  组件，提供在不同设备上都有良好体验的响应式布局。
-- **视觉化延迟**:
-  使用不同颜色的标签来区分延迟等级（绿色=快，红色=慢），使结果一目了然。
+### NAT64/DNS64 测试工具
 
-## 技术栈
+- **DNS64 解析测试**: 通过 DoH 查询 A 记录获取 IPv4 地址
+- **NAT64 地址合成**: 手动合成 IPv6 地址（前缀:96 + IPv4:4 字节）
+- **连接测试**: 验证通过 NAT64 的 HTTPS 连接
+- **性能指标**: 记录 DNS 延迟和连接延迟
+- **并发测试**: 支持多并发测试加速
+- **JSON 报告**: 自动生成详细测试报告
 
-- **前端框架**: [Vue 3](https://vuejs.org/) (Composition API)
-- **构建工具**: [Vite](https://vitejs.dev/)
-- **UI 组件库**: [Vuetify 3](https://vuetifyjs.com/)
-- **数据加载**: Vite `import.meta.glob`
+### Vue.js 前端仪表板
+
+- **动态数据加载**: 自动加载所有测试报告文件
+- **多维度排序**: 按延迟、成功率等指标排序
+- **高级筛选**: 按国家、ASN、IP 版本、协议等筛选
+- **统计概览**: 实时显示测试统计指标
+- **响应式设计**: Material Design 风格
 
 ## 快速开始
 
 ### 前置要求
 
-- [Node.js](https://nodejs.org/) (推荐 v16+)
-- [npm](https://www.npmjs.com/) 或 [yarn](https://yarnpkg.com/)
+- [Node.js](https://nodejs.org/) v16+
+- [Go](https://golang.org/) 1.21+
+- IPv6 网络连接（用于 NAT64 测试）
 
-### 安装和运行
+### 安装
 
-1. **克隆项目**
+```bash
+# 克隆项目
+git clone <your-repository-url>
+cd network-speed-dashboard-nat64-address-preferred
 
-   ```bash
-   git clone <your-repository-url>
-   cd network-speed-dashboard-nat64-address-preferred
-   ```
+# 安装前端依赖
+npm install
+```
 
-2. **安装依赖**
+### 运行 NAT64 测试
 
-   ```bash
-   npm install
-   ```
+```bash
+# 运行 NAT64/DNS64 测试
+go run nat64.go -verbose
 
-3. **启动开发服务器**
+# 使用自定义配置
+go run nat64.go -services nat64-services.json -targets test-targets.json -concurrency 10
 
-   ```bash
-   npm run dev
-   ```
+# 指定 DoH 服务器
+go run nat64.go -dohip 104.21.95.9 -doh-url https://deno-dns-over-https-server.g18uibxgnb.de5.net/
+```
 
-4. **访问应用** 打开浏览器访问 `http://localhost:5173` (Vite
-   默认端口)，应用会自动打开。
+### 运行 HTTP/3 连通性测试
+
+```bash
+# 运行连通性测试
+go run host_connectivity_check.go -verbose -dohip 104.21.95.9 --doh-url https://deno-dns-over-https-server.g18uibxgnb.de5.net/
+
+# 指定并发数和超时
+go run host_connectivity_check.go -concurrency 20 -timeout 15
+```
+
+### 启动前端仪表板
+
+```bash
+# 开发模式
+npm run dev
+# 访问 http://localhost:5173
+
+# 构建生产版本
+npm run build
+
+# 预览生产构建
+npm run preview
+```
 
 ## 项目结构
 
 ```
 network-speed-dashboard-nat64-address-preferred/
-├── public/                  # 静态资源
-│   └── failed-test-report-*.json  # 测速报告文件存放于此
+├── nat64.go                    # NAT64/DNS64 测试工具
+├── host_connectivity_check.go  # HTTP/3 连通性测试工具
+├── main.go                     # HTTP/3 主测试程序
+├── extract_hosts.go            # 主机提取工具
+├── nat64-services.json         # NAT64 服务配置
+├── test-targets.json           # 测试目标配置
+├── hosts.json                  # 主机列表
 ├── src/
 │   ├── components/
-│   │   └── SpeedDashboard.vue  # 主要的仪表板组件
+│   │   └── SpeedDashboard.vue  # 主仪表板组件
 │   ├── plugins/
-│   │   └── vuetify.js      # Vuetify 配置和插件设置
-│   ├── App.vue             # 根组件
-│   └── main.js             # 应用入口文件
-├── index.html              # HTML 模板
-├── package.json            # 项目依赖和脚本
-└── vite.config.js          # Vite 配置文件
+│   │   └── vuetify.js          # Vuetify 配置
+│   ├── App.vue
+│   └── main.js
+├── public/                     # 静态资源
+├── vite.config.js              # Vite 配置
+└── package.json
 ```
 
-## 数据格式说明
+## 配置说明
 
-为了让应用能够正确读取和解析数据，请将你的测速结果 JSON 文件放置在 `public`
-目录下，并遵循 `failed-test-report-*.json` 的命名格式（例如
-`failed-test-report-20231212-154327.json`）。
-
-每个 JSON 文件应包含以下关键结构：
+### NAT64 服务配置 (`nat64-services.json`)
 
 ```json
 {
-  "report_info": { ... },
-  "latency_statistics": { ... },
-  "error_analysis": { ... },
-  "statistics": { ... },
-  "failed_tests": [
-    // 失败的测试记录数组
+  "services": [
     {
-      "index": 141,
-      "host": "cfip.xxxxxxxx.tk",
-      "target_ip": "198.41.212.130",
-      "ip_version": "IPv4",
-      "protocol": "none",
-      "status_code": null,
-      "latency_ms": 0,
-      "server_header": "N/A",
-      "error_msg": "dial tcp ...",
-      "timestamp": "2025-12-12T07:43:34.062Z",
-      "success": false
+      "provider": "Kasper Dupont",
+      "location": "Germany / Nürnberg",
+      "website": "https://nat64.net/public-providers",
+      "nat64_prefixes": ["2a00:1098:2b::/96"],
+      "dot": "dot.nat64.dk"
+    }
+  ]
+}
+```
+
+### 测试目标配置 (`test-targets.json`)
+
+```json
+{
+  "targets": [
+    {
+      "protocol": "https",
+      "name": "IPLeak.net",
+      "host": "ipv4.ipleak.net",
+      "path": "/?mode=json",
+      "description": "IPv4 地理位置查询"
+    }
+  ]
+}
+```
+
+## 命令行选项
+
+### nat64.go
+
+| 选项           | 默认值                                              | 说明                       |
+| -------------- | --------------------------------------------------- | -------------------------- |
+| `-verbose`     | false                                               | 详细输出                   |
+| `-concurrency` | 10                                                  | 并发测试数量               |
+| `-timeout`     | 10                                                  | 超时时间(秒)               |
+| `-services`    | nat64-services.json                                 | NAT64 服务配置文件         |
+| `-targets`     | test-targets.json                                   | 测试目标配置文件           |
+| `-output`      | 自动生成                                            | 输出文件名                 |
+| `-doh-url`     | https://pngwczx94z.cloudflare-gateway.com/dns-query | DoH 服务 URL               |
+| `-dohip`       | 162.159.36.20                                       | 强制解析 DoH 域名到指定 IP |
+
+### host_connectivity_check.go
+
+| 选项           | 默认值     | 说明                        |
+| -------------- | ---------- | --------------------------- |
+| `-verbose`     | false      | 详细输出                    |
+| `-concurrency` | 10         | 并发测试数量                |
+| `-timeout`     | 10         | 超时时间(秒)                |
+| `-input`       | hosts.json | 输入文件路径                |
+| `-ip-version`  | all        | IP 版本过滤 (ipv4/ipv6/all) |
+
+## 测试报告格式
+
+### NAT64 测试报告 (`nat64-test-report-*.json`)
+
+```json
+{
+  "report_info": {
+    "generated_at": "2024-03-05T15:30:45Z",
+    "tool_version": "1.0.0"
+  },
+  "test_results": [
+    {
+      "timestamp": "2024-03-05T15:30:45Z",
+      "service_provider": "Kasper Dupont",
+      "service_location": "Germany / Nürnberg",
+      "nat64_prefix": "2a00:1098:2b::/96",
+      "target_host": "ipv4.ipleak.net",
+      "original_ipv4": "104.21.95.9",
+      "synthesized_ipv6": "2a00:1098:2b::6815:5f09",
+      "dns64_success": true,
+      "dns64_latency_ms": 45,
+      "connect_success": true,
+      "connect_latency_ms": 123,
+      "http_status_code": 200
     }
   ],
-  "top_latency_records": [
-    // 成功的（或延迟最低的）测试记录数组
-    {
-      "index": 4,
-      "host": "ct.877774.xyz",
-      "target_ip": "172.64.229.174",
-      "ip_version": "IPv4",
-      "protocol": "h3",
-      "status_code": 200,
-      "latency_ms": 146,
-      "server_header": "cloudflare",
-      "error_msg": "No error message",
-      "timestamp": "2025-12-12T07:43:34.062Z",
-      "success": true
-    }
-  ],
-  "test_environment": {
-    "timestamp": "2025-12-12T07:43:34.075Z",
-    "ip_info": {
-      "ip": "2409:891f:8223:a9e6:b8fa:1abc:1a83:143b",
-      "asn": "AS24400",
-      "as_name": "Shanghai Mobile Communications Co.,Ltd.",
-      "country": "China"
-      // ... 其他 IP 信息
-    }
+  "summary": {
+    "total_tests": 28,
+    "success_tests": 25,
+    "failed_tests": 3,
+    "dns64_success_rate": 96.43,
+    "connect_success_rate": 89.29,
+    "avg_dns_latency_ms": 52.34,
+    "avg_connect_latency_ms": 145.67
   }
 }
 ```
 
-应用主要读取 `failed_tests`、`top_latency_records` 和 `test_environment`
-这三个部分来生成表格和筛选器。
+### 连通性测试报告 (`failed-test-report-*.json`)
 
-## 如何使用
-
-1. **筛选数据**:
-   - 在页面顶部的筛选卡片中，使用下拉菜单选择国家、ASN、IP版本或协议。
-   - 使用复选框控制是否显示成功或失败的测试。
-   - 点击 "清除筛选" 按钮可以重置所有筛选条件。
-
-2. **查看统计**:
-   - 筛选卡片下方的四个统计卡片会实时显示当前筛选结果下的总测试数、成功数、失败数和平均延迟。
-
-3. **排序和搜索**:
-   - 在结果表格中，点击任意列的标题可以按该列进行升序或降序排序。
-   - 使用表格右上角的搜索框可以按主机名、IP 地址等关键词进行全文搜索。
-
-## 构建生产版本
-
-当你准备好将应用部署到生产环境时，可以运行以下命令：
-
-```bash
-npm run build
+```json
+{
+  "report_info": { "generated_at": "timestamp" },
+  "test_environment": {
+    "ip_info": { "country": "China", "asn": "AS24400" }
+  },
+  "top_latency_records": [...],
+  "failed_tests": [...]
+}
 ```
 
-这会在项目根目录下生成一个 `dist`
-文件夹，里面包含了所有优化和压缩后的静态文件，你可以将它们部署到任何静态文件服务器上。
+## 技术架构
+
+### NAT64 测试流程
+
+```
+┌─────────────────┐
+│  加载配置文件    │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  通过 DoH 查询   │
+│  A 记录获取 IPv4 │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  手动合成 IPv6   │
+│  前缀(12B)+IPv4(4B)│
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  测试 HTTPS 连接 │
+│  使用合成 IPv6   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  生成 JSON 报告  │
+└─────────────────┘
+```
+
+### 技术栈
+
+**前端:**
+
+- Vue 3 (Composition API)
+- Vite 7
+- Vuetify 3
+- TypeScript
+
+**后端:**
+
+- Go 1.25
+- miekg/dns (DNS 消息处理)
+- HTTP/3 支持 (quic-go)
+
+## npm 脚本
+
+```bash
+npm run dev          # 启动开发服务器
+npm run build        # 构建生产版本
+npm run preview      # 预览生产构建
+npm run type-check   # TypeScript 类型检查
+npm run fetch        # 获取 Cloudflare IPs
+npm run extract      # 提取和合并 IP 信息
+npm run clean        # 清理旧报告
+npm run start        # 运行完整测试流程
+```
+
+## 支持的 NAT64 服务商
+
+| 服务商           | 位置          | NAT64 前缀                 |
+| ---------------- | ------------- | -------------------------- |
+| Kasper Dupont    | 德国/纽伦堡   | 2a00:1098:2b::/96          |
+| Kasper Dupont    | 英国/伦敦     | 2a00:1098:2c:1::/96        |
+| Kasper Dupont    | 芬兰/赫尔辛基 | 2a01:4f8:c2c:123f:64::/96  |
+| level66.services | 德国/Anycast  | 2001:67c:2960:6464::/96    |
+| Trex             | 芬兰/坦佩雷   | 2001:67c:2b0:db32:0:1::/96 |
+| ZTVI             | 美国/弗里蒙特 | 2602:fc59:b0:64::/96       |
+| ZTVI             | 美国/芝加哥   | 2602:fc59:11:64::/96       |
+
+## 参考资料
+
+- [RFC 6147 - DNS64](https://datatracker.ietf.org/doc/html/rfc6147)
+- [RFC 6146 - NAT64](https://datatracker.ietf.org/doc/html/rfc6146)
+- [RFC 7050 - NAT64 前缀发现](https://datatracker.ietf.org/doc/html/rfc7050)
+- [nat64.net](https://nat64.net/) - 公共 NAT64 服务
 
 ## 许可证
 
 [MIT](LICENSE)
-
-# Vuetify (Default)
-
-This is the official scaffolding tool for Vuetify, designed to give you a head
-start in building your new Vuetify application. It sets up a base template with
-all the necessary configurations and standard directory structure, enabling you
-to begin development without the hassle of setting up the project from scratch.
-
-## ❗️ Important Links
-
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
-
-## 💿 Install
-
-Set up your project using your preferred package manager. Use the corresponding
-command to install the dependencies:
-
-| Package Manager                                           | Command        |
-| --------------------------------------------------------- | -------------- |
-| [yarn](https://yarnpkg.com/getting-started)               | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install) | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                      | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                    | `bun install`  |
-
-After completing the installation, your environment is ready for Vuetify
-development.
-
-## ✨ Features
-
-- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for
-  a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) |
-  [Vuetify 3](https://vuetifyjs.com/en/)
-- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/),
-  the intuitive, modular state management solution for Vue.
-- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and
-  vite-plugin-vue-layouts-next for organizing Vue file layouts.
-  [Vue Router](https://router.vuejs.org/) |
-  [vite-plugin-vue-layouts-next](https://github.com/loicduong/vite-plugin-vue-layouts-next)
-- 💻 **Enhanced Development Experience**: Benefit from TypeScript's static type
-  checking and the ESLint plugin suite for Vue, ensuring code quality and
-  consistency. [TypeScript](https://www.typescriptlang.org/) |
-  [ESLint Plugin Vue](https://eslint.vuejs.org/)
-- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and
-  instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
-- 🧩 **Automated Component Importing**: Streamline your workflow with
-  unplugin-vue-components, automatically importing components as you use them.
-  [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
-- 🛠️ **Strongly-Typed Vue**: Use vue-tsc for type-checking your Vue components,
-  and enjoy a robust development experience.
-  [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/packages/vue-tsc)
-
-These features are curated to provide a seamless development experience from
-setup to deployment, ensuring that your Vuetify application is both powerful and
-maintainable.
-
-## 💡 Usage
-
-This section covers how to start the development server and build your project
-for production.
-
-### Starting the Development Server
-
-To start the development server with hot-reload, run the following command. The
-server will be accessible at [http://localhost:3000](http://localhost:3000):
-
-```bash
-yarn dev
-```
-
-(Repeat for npm, pnpm, and bun with respective commands.)
-
-> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that
-> happen as part of the Vuetify import mapping. If you are on Node
-> [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can
-> change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the
-> warning, you can remove this from your package.json dev script.
-
-### Building for Production
-
-To build your project for production, use:
-
-```bash
-yarn build
-```
-
-(Repeat for npm, pnpm, and bun with respective commands.)
-
-Once the build process is completed, your application will be ready for
-deployment in a production environment.
-
-## 💪 Support Vuetify Development
-
-This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library
-with a comprehensive collection of Vue components. Vuetify is an MIT licensed
-Open Source project that has been made possible due to the generous
-contributions by our
-[sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/).
-If you are interested in supporting this project, please consider:
-
-- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
-- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
-- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
-- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
-- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
-- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
-- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
-
-## 📑 License
-
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2016-present Vuetify, LLC
