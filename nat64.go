@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	h3_experiment "github.com/masx200/http3-reverse-proxy-server-experiment/h3"
 	"github.com/miekg/dns"
 )
 
@@ -52,6 +53,8 @@ type NAT64TestResult struct {
 	ConnectSuccess   bool              `json:"connect_success"`
 	ConnectLatencyMs uint64            `json:"connect_latency_ms"`
 	HTTPStatusCode   *uint16           `json:"http_status_code,omitempty"`
+	Protocol         string            `json:"protocol,omitempty"`
+	ServerHeader     string            `json:"server_header,omitempty"`
 	ErrorMessage     string            `json:"error_message,omitempty"`
 	TestDetails      map[string]string `json:"test_details,omitempty"`
 }
@@ -424,47 +427,114 @@ func isNAT64Address(ipv6Addr, prefix string) bool {
 	return ipNet.Contains(ip)
 }
 
-// testNAT64Connection 测试通过 NAT64 的连接
-func testNAT64Connection(ipv6Addr, hostname, path string) (bool, uint16, uint64, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
-	defer cancel()
-
-	client := &http.Client{
-		Timeout: time.Duration(*timeout) * time.Second,
-		Transport: &http.Transport{
-			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-				dialer := &net.Dialer{}
-				// 强制使用合成的 IPv6 地址
-				targetAddr := fmt.Sprintf("[%s]:443", ipv6Addr)
-				return dialer.DialContext(ctx, "tcp6", targetAddr)
-			},
-		},
-	}
-
+// testNAT64Connection 测试通过 NAT64 的连接（先尝试 HTTP/3，失败则回退到 HTTP/2）
+func testNAT64Connection(ipv6Addr, hostname, path string) (bool, uint16, uint64, string, string, error) {
 	// 构建完整 URL，包含路径
 	url := fmt.Sprintf("https://%s%s", hostname, path)
 	if path == "" {
 		url = fmt.Sprintf("https://%s/", hostname)
 	}
 
+	// 先尝试 HTTP/3
+	success, statusCode, latency, protocol, serverHeader, err := testHTTP3Connection(ipv6Addr, hostname, url)
+	if err != nil {
+		if *verbose {
+			fmt.Printf("  HTTP/3 连接失败: %v，尝试 HTTP/2...\n", err)
+		}
+		// 回退到 HTTP/2
+		success, statusCode, latency, protocol, serverHeader, err = testHTTP2Connection(ipv6Addr, hostname, url)
+	}
+
+	return success, statusCode, latency, protocol, serverHeader, err
+}
+
+// testHTTP3Connection 测试 HTTP/3 连接
+func testHTTP3Connection(ipv6Addr, hostname, url string) (bool, uint16, uint64, string, string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
+	defer cancel()
+
+	// 使用 H3 实验传输器
+	transport := h3_experiment.CreateHTTP3TransportWithIPGetter(func() (string, error) {
+		return ipv6Addr, nil
+	})
+
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   time.Duration(*timeout) * time.Second,
+	}
+
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return false, 0, 0, err
+		transport.Close()
+		return false, 0, 0, "h3", "", err
 	}
 
 	req.Header.Set("Host", hostname)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36")
+	req.Header.Set("User-Agent", "curl/8.12.1")
 
 	start := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, 0, 0, err
+		transport.Close()
+		return false, 0, 0, "h3", "", err
 	}
 	defer resp.Body.Close()
 
 	latency := uint64(time.Since(start).Milliseconds())
+	statusCode := uint16(resp.StatusCode)
+	serverHeader := resp.Header.Get("Server")
 
-	return resp.StatusCode >= 200 && resp.StatusCode < 300, uint16(resp.StatusCode), latency, nil
+	defer transport.Close()
+
+	return resp.StatusCode >= 200 && resp.StatusCode < 300, statusCode, latency, "h3", serverHeader, nil
+}
+
+// testHTTP2Connection 测试 HTTP/2 连接
+func testHTTP2Connection(ipv6Addr, hostname, url string) (bool, uint16, uint64, string, string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(*timeout)*time.Second)
+	defer cancel()
+
+	targetAddr := fmt.Sprintf("[%s]:443", ipv6Addr)
+
+	dialer := &net.Dialer{
+		Timeout: time.Duration(*timeout) * time.Second,
+	}
+
+	conn, err := dialer.Dial("tcp", targetAddr)
+	if err != nil {
+		return false, 0, 0, "h2", "", err
+	}
+	defer conn.Close()
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return false, 0, 0, "h2", "", err
+	}
+
+	req.Header.Set("Host", hostname)
+	req.Header.Set("User-Agent", "curl/8.12.1")
+
+	start := time.Now()
+	client := &http.Client{
+		Transport: &http.Transport{
+			Dial: func(network, addr string) (net.Conn, error) {
+				return conn, nil
+			},
+		},
+		Timeout: time.Duration(*timeout) * time.Second,
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return false, 0, 0, "h2", "", err
+	}
+	defer resp.Body.Close()
+
+	latency := uint64(time.Since(start).Milliseconds())
+	statusCode := uint16(resp.StatusCode)
+	serverHeader := resp.Header.Get("Server")
+
+	return resp.StatusCode >= 200 && resp.StatusCode < 300, statusCode, latency, "h2", serverHeader, nil
 }
 
 // generateReport 生成测试报告

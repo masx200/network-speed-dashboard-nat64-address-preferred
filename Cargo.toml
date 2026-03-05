@@ -1,70 +1,95 @@
 [package]
-name = "golang-http3-cloudflare-test-tool"
+name = "network-speed-dashboard-nat64-address-preferred"
 version = "0.1.0"
 edition = "2021"
-authors = ["masx200"]
+authors = [ "masx200" ]
 description = "A Rust tool for testing Cloudflare HTTP/3 connectivity with DNS over HTTPS support"
 license = "MIT"
+
 
 [dependencies]
 anyhow = "1.0"
 base64 = "0.21"
 bytes = "1.11"
-h3 = { version = "0.0.8" }
-quinn = { version = "0.10", features = ["rustls"] }
 rcgen = "0.11"
-reqwest = { version = "0.12.24", features = ["json","rustls-tls", "http3", "gzip", "brotli"] }
-serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.0", features = ["full"] }
 trust-dns-proto = "0.22"
-
-# 正则表达式 (用于解析复杂的 DNS 字符串)
 regex = "1"
-
-# URL编码 (用于DoH查询参数)
 urlencoding = "2"
-
-# Hickory-DNS - 使用本地 hickory-dns 库替代 trust-dns
-hickory-resolver = {  version="0.25.2", features = ["tokio", "dnssec-ring"] }
-hickory-client = { version="0.25.2", features = ["dnssec-ring"] }
-
-# HTTP URI 解析库，用于解析 DoH URL
 http = "1.1"
-
-# 随机数生成，用于 DNS 查询 ID
 rand = "0.9"
-
-# 其他 Hickory-DNS 相关依赖
-hickory-proto = {version = "0.25.2",features = ["dnssec-ring"] }
-rustls = { version = "0.23.35", features = ["std", "ring"], default-features = false }
 webpki-roots = "1"
 ring = "0.17.14"
-
-# 异步工具
 futures = "0.3"
-
-# HTTP/3 测试相关依赖
-chrono = { version = "0.4", features = ["serde"] }
 rustls-native-certs = "0.7"
-h3-quinn = { version = "0.0.10"}
-clap = { version = "4.0", features = ["derive"] }
 rustls-pki-types = "1.10"
-
-# 日志追踪
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
-
-# 添加安全版本的idna依赖
 idna = "1.1.0"
 
-[patch.crates-io]
 
-# ring = { version = "0.17.14" }  # 或你需要的修复版本
-# idna = { version = "=1.1.0" }    # 修复安全漏洞的版本
-# 如果需要覆盖某些依赖版本，可以在这里添加
-# reqwest = { path = "./reqwest-master/reqwest-master" }
+[dependencies.h3]
+version = "0.0.8"
 
-# ring = "=0.17.13"
 
-# idna = "=1.1.0"
+[dependencies.quinn]
+version = "0.10"
+features = [ "rustls" ]
+
+
+[dependencies.reqwest]
+version = "0.12.24"
+features = [ "json", "rustls-tls", "http3", "gzip", "brotli" ]
+
+
+[dependencies.serde]
+version = "1.0"
+features = [ "derive" ]
+
+
+[dependencies.tokio]
+version = "1.0"
+features = [ "full" ]
+
+
+[dependencies.hickory-resolver]
+version = "0.25.2"
+features = [ "tokio", "dnssec-ring" ]
+
+
+[dependencies.hickory-client]
+version = "0.25.2"
+features = [ "dnssec-ring" ]
+
+
+[dependencies.hickory-proto]
+version = "0.25.2"
+features = [ "dnssec-ring" ]
+
+
+[dependencies.rustls]
+version = "0.23.35"
+features = [ "std", "ring" ]
+default-features = false
+
+
+[dependencies.chrono]
+version = "0.4"
+features = [ "serde" ]
+
+
+[dependencies.h3-quinn]
+version = "0.0.10"
+
+
+[dependencies.clap]
+version = "4.0"
+features = [ "derive" ]
+
+
+[dependencies.tracing-subscriber]
+version = "0.3"
+features = [ "fmt", "env-filter" ]
+
+
+[patch]
+crates-io = { }

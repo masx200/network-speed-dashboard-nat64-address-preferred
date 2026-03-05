@@ -1,4 +1,4 @@
-module github.com/masx200/golang-http3-cloudflare-test-tool
+module github.com/masx200/network-speed-dashboard-nat64-address-preferred
 
 go 1.25.4
 
